@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}Welcome!{% endblock %}</title>
+        {% block stylesheets %}{% endblock %}
+        <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+
+
+    <link rel="stylesheet" href="/css/theme/bootstrap.min.css" media="screen">
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+
+        {% block javascripts %}{% endblock %}
+     </head>
+  <body>
+    <div class="navbar navbar-default navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <a href="../" class="navbar-brand">ReleaseHub</a>
+        </div>
+        <div class="navbar-collapse collapse" id="navbar-main">
+          <ul class="nav navbar-nav">
+            <li class="dropdown">
+              <a class="dropdown-toggle" data-toggle="dropdown" href="#" id="themes">Themes <span class="caret"></span></a>
+              <ul class="dropdown-menu" aria-labelledby="themes">
+                <li><a href="../default/">Default</a></li>
+                <li class="divider"></li>
+                <li><a href="../amelia/">Amelia</a></li>
+                <li><a href="../cerulean/">Cerulean</a></li>
+                <li><a href="../cosmo/">Cosmo</a></li>
+                <li><a href="../cyborg/">Cyborg</a></li>
+                <li><a href="../darkly/">Darkly</a></li>
+                <li><a href="../flatly/">Flatly</a></li>
+                <li><a href="../journal/">Journal</a></li>
+                <li><a href="../lumen/">Lumen</a></li>
+                <li><a href="../readable/">Readable</a></li>
+                <li><a href="../simplex/">Simplex</a></li>
+                <li><a href="../slate/">Slate</a></li>
+                <li><a href="../spacelab/">Spacelab</a></li>
+                <li><a href="../superhero/">Superhero</a></li>
+                <li><a href="../united/">United</a></li>
+                <li><a href="../yeti/">Yeti</a></li>
+              </ul>
+            </li>
+            <li>
+              <a href="../help/">Help</a>
+            </li>
+          </ul>
+
+        </div>
+      </div>
+    </div>
+
+
+    <div class="container">
+     <div class="page-header" id="banner">
+<div class="row">
+<div class="bs-component">
+
+{% for flashMessage in app.session.flashbag.get('success') %}
+  <div class="alert alert-dismissable alert-success">
+    <button type="button" class="close" data-dismiss="alert">×</button>
+    {{ flashMessage }}
+  </div>
+{% endfor %}
+
+{% for flashMessage in app.session.flashbag.get('info') %}
+  <div class="alert alert-dismissable alert-info">
+    <button type="button" class="close" data-dismiss="alert">×</button>
+    {{ flashMessage }}
+  </div>
+{% endfor %}
+
+{% for flashMessage in app.session.flashbag.get('error') %}
+  <div class="alert alert-dismissable alert-danger">
+    <button type="button" class="close" data-dismiss="alert">×</button>
+    {{ flashMessage }}
+  </div>
+{% endfor %}
+
+            </div>
+ 
+</div>
+        <div class="row">
+          <div class="col-lg-6">
+            <h1>ReleaseHub</h1>
+            <p class="lead">View Latest Releases</p>
+          </div>
+        </div>
+      </div>
+
+        
+    {% block body %}{% endblock %}
+
+
+      <footer>
+        <div class="row">
+          <div class="col-lg-12">
+           <p>ReleaseHub</p>
+          </div>
+        </div>
+
+      </footer>
+
+
+    </div>
+
+
+    <script src="/js/bootstrap.min.js"></script>
+  </body>
+</html>
+

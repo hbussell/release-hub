@@ -1,0 +1,21 @@
+---
+- hosts: localhost
+
+  vars:
+    git_url: git@github.com:hbussell/release-hub.git
+  
+  tasks:
+    - name: ensure packages are installed
+      action: apt name={{item}}
+      with_items:
+          - php5
+          - php5-cli
+          - curl
+
+    - name: set log permissions
+      action: file path=app/logs mode=0660 owner=www-data group=www-data
+
+    - name: set cache permissions
+      action: file path=app/cache mode=0660 owner=www-data group=www-data
+
+

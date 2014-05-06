@@ -1,0 +1,37 @@
+Relhub\WebBundle\Entity\ReleaseBuild:
+    type: entity
+    table: null
+    id:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+    fields:
+        status:
+            type: string
+            length: 255
+        output:
+            type: text
+            nullable: TRUE
+        created:
+            type: datetimetz
+        finished:
+            type: datetimetz
+            nullable: TRUE
+        user:
+            type: integer
+    lifecycleCallbacks: {  }
+
+
+    manyToOne:
+        releaseVersion:
+            targetEntity: ReleaseVersion
+            inversedBy: releaseVersion
+            joinColumn:
+                name: releaseVersion
+                referencedColumnName: id
+
+
+
+

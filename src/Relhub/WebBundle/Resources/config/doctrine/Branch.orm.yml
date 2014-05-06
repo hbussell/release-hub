@@ -1,0 +1,68 @@
+Relhub\WebBundle\Entity\Branch:
+    type: entity
+    table: null
+    id:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+    fields:
+        name:
+            type: string
+            length: 255
+        created:
+            type: datetimetz
+        published:
+            type: datetimetz
+            nullable: true
+        revision:
+            type: string
+            length: 255
+        vcsUrl:
+            type: string
+            length: 255
+            nullable: true
+        ticketUrl:
+            type: string
+            length: 255
+            nullable: true
+    lifecycleCallbacks: {  }
+
+    manyToOne:
+   
+        project:
+            targetEntity: Project
+            inversedBy: project
+            joinColumn:
+                name: project_id
+                referencedColumnName: id
+        release:
+            targetEntity: ReleaseVersion
+            inversedBy: release
+            joinColumn:
+                name: release_id
+                referencedColumnName: id
+
+    manyToMany:
+        transitions:
+          targetEntity: WorkflowTransition
+          joinTable:
+            name: BranchTransitions
+            joinColumns:
+              branch_id:
+                referencedColumnName: id
+            inverseJoinColumns:
+              transition_id:
+                referencedColumnName: id
+
+        authors:
+          targetEntity: Author
+          joinTable:
+            name: BranchAuthors
+            joinColumns:
+              branch_id:
+                referencedColumnName: id
+            inverseJoinColumns:
+              author_id:
+                referencedColumnName: id

@@ -1,0 +1,52 @@
+Relhub\WebBundle\Entity\WorkflowTransition:
+    type: entity
+    table: null
+    repositoryClass: null
+    id:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+    fields:
+        created:
+            type: datetime
+
+
+    lifecycleCallbacks: {  }
+
+    manyToOne:
+       
+        toState:
+            targetEntity: WorkflowState
+            inversedBy: toState
+            joinColumn:
+                name: toState_id
+                referencedColumnName: id
+
+        fromState:
+            targetEntity: WorkflowState
+            inversedBy: fromState
+            joinColumn:
+                name: fromState_id
+                referencedColumnName: id
+
+        creator:
+            targetEntity: User
+            inversedBy: creator
+            joinColumn:
+                name: creator_id
+                referencedColumnName: id
+
+        branch:
+            targetEntity: Branch
+            inversedBy: branch
+            joinColumn:
+                name: branch_id
+                referencedColumnName: id
+
+
+
+
+
+

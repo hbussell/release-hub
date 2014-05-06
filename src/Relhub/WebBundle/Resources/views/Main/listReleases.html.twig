@@ -1,0 +1,18 @@
+{% extends '::base.html.twig' %}
+
+{% block title %}ReleaseHub{% endblock %}
+
+{% block body %}
+<h1>Releases</h1>
+<ul>
+{% for release in releases %}
+
+<li>
+{{release.name }}
+{% if release.isBuildable %}
+  <a href="{{ path('relhub_web_release_build', {'release': release.id}) }}">Build Release</a>
+{% endif %}
+</li>
+{% endfor %}
+</ul>
+{% endblock %}

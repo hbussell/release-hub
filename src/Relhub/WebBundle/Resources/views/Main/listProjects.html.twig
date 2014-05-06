@@ -1,0 +1,16 @@
+{% extends '::base.html.twig' %}
+
+{% block title %}ReleaseHub{% endblock %}
+
+{% block body %}
+<h1>Project list</h1>
+<ul>
+{% for project in projects %}
+
+<li>
+{{ project.name }}
+<a href="{{ path('relhub_web_release_create', {'project': project.id}) }}">Create Release</a>
+</li>
+{% endfor %}
+</ul>
+{% endblock %}

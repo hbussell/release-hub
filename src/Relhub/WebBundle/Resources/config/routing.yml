@@ -1,0 +1,26 @@
+relhub_web_homepage:
+    pattern:  /
+    defaults: { _controller: RelhubWebBundle:Main:index }
+
+relhub_web_project_create:
+    pattern:  /project/create
+    defaults: { _controller: RelhubWebBundle:Main:createProject }
+
+relhub_web_projects:
+    pattern:  /project
+    defaults: { _controller: RelhubWebBundle:Main:listProjects }
+
+
+
+relhub_web_release_create:
+    pattern:  /release/create/{project}
+    defaults: { _controller: RelhubWebBundle:Main:createRelease }
+
+relhub_web_release_build:
+    pattern:  /release/build/{release}
+    defaults: { _controller: RelhubWebBundle:Main:buildRelease }
+
+
+relhub_web_releases:
+    pattern:  /release
+    defaults: { _controller: RelhubWebBundle:Main:listReleases }

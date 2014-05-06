@@ -1,0 +1,47 @@
+Relhub\WebBundle\Entity\ReleaseVersion:
+    type: entity
+    table: null
+    id:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+    fields:
+        name:
+            type: string
+            length: 255
+        created:
+            type: datetimetz
+        published:
+            type: datetimetz
+            nullable: TRUE
+        status:
+            type: string
+            length: 255
+        dueDate:
+            type: datetimetz
+            nullable: TRUE
+        branchNames:
+            type: text
+
+    lifecycleCallbacks: {  }
+
+    manyToOne:
+        approver:
+            targetEntity: User
+            inversedBy: releaseVersions
+            joinColumn:
+                name: approver_id
+                referencedColumnName: id
+
+        project:
+            targetEntity: Project
+            inversedBy: project
+            joinColumn:
+                name: project_id
+                referencedColumnName: id
+
+
+
+

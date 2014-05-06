@@ -1,0 +1,35 @@
+Relhub\WebBundle\Entity\Project:
+    type: entity
+    table: null
+    id:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+    fields:
+        name:
+            type: string
+            length: 255
+        preBuildHooks:
+            type: text
+        postBuildHooks:
+            type: text      
+        prePublishHooks:
+            type: text
+        postPublishHooks:
+            type: text
+
+    lifecycleCallbacks: {  }
+
+    manyToMany:
+        users:
+          targetEntity: User
+          joinTable:
+            name: UserProjects
+            joinColumns:
+              user_id:
+                referencedColumnName: id
+            inverseJoinColumns:
+              project_id:
+                referencedColumnName: id
