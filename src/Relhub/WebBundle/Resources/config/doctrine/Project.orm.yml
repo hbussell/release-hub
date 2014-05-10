@@ -11,6 +11,11 @@ Relhub\WebBundle\Entity\Project:
         name:
             type: string
             length: 255
+        actions:
+            type: text
+        gitUrl:
+            type: string
+            length: 500
         preBuildHooks:
             type: text
         postBuildHooks:

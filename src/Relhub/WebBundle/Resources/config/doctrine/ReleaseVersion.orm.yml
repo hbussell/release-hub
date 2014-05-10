@@ -1,6 +1,7 @@
 Relhub\WebBundle\Entity\ReleaseVersion:
     type: entity
     table: null
+    repositoryClass: Relhub\WebBundle\Entity\ReleaseVersionRepository
     id:
         id:
             type: integer
@@ -19,11 +20,18 @@ Relhub\WebBundle\Entity\ReleaseVersion:
         status:
             type: string
             length: 255
+        stage:
+            type: string
+            length: 255
         dueDate:
             type: datetimetz
             nullable: TRUE
         branchNames:
             type: text
+        actions:
+            type: text
+
+
 
     lifecycleCallbacks: {  }
 

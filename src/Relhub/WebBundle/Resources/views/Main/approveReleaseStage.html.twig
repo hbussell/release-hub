@@ -1,9 +1,9 @@
 {% extends '::base.html.twig' %}
 
-{% block title %}ReleaseHub: Build {{ release }}{% endblock %}
+{% block title %}ReleaseHub: Approve {{ release }} {{stage}} stage{% endblock %}
 
 {% block body %}
-<h1>Build {{ release }}</h1>
+<h1>Approve {{ release }} {{stage}} stage</h1>
 
 {{ form_start(form) }}
 
@@ -17,7 +17,5 @@
 {{ form(form) }}
 
 {{ form_end(form) }}
-
-
 
 {% endblock %}

@@ -14,13 +14,26 @@ relhub_web_projects:
 
 relhub_web_release_create:
     pattern:  /release/create/{project}
-    defaults: { _controller: RelhubWebBundle:Main:createRelease }
+    defaults: { _controller: RelhubWebBundle:Main:createRelease, project: 0 }
+
+relhub_web_release_edit:
+    pattern:  /release/edit/{release}
+    defaults: { _controller: RelhubWebBundle:Main:editRelease }
+
 
 relhub_web_release_build:
-    pattern:  /release/build/{release}
-    defaults: { _controller: RelhubWebBundle:Main:buildRelease }
+    pattern:  /release/build_stage/{release}/{stage}
+    defaults: { _controller: RelhubWebBundle:Main:buildReleaseStage }
+
+relhub_web_release_approve_stage:
+    pattern:  /release/approve_stage/{release}/{stage}
+    defaults: { _controller: RelhubWebBundle:Main:approveReleaseStage }
 
 
+
+relhub_web_release_publish:
+    pattern:  /release/publish/{release}
+    defaults: { _controller: RelhubWebBundle:Main:publishRelease }
 relhub_web_releases:
     pattern:  /release
     defaults: { _controller: RelhubWebBundle:Main:listReleases }

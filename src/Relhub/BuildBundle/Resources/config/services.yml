@@ -2,6 +2,18 @@ parameters:
 #    relhub_build.example.class: Relhub\BuildBundle\Example
 
 services:
-#    relhub_build.example:
-#        class: %relhub_build.example.class%
-#        arguments: [@service_id, "plain_value", %parameter%]
+    relhub_build.build:
+        class: Relhub\BuildBundle\Service\BuildService
+        arguments: [@relhub_build.ansibleCommand,@relhub_build.shellCommand,@relhub_build.httpCommand,@relhub_build.manualCommand]
+
+    relhub_build.ansibleCommand:
+        class: Relhub\BuildBundle\Service\Command\AnsibleCommand
+
+    relhub_build.shellCommand:
+        class: Relhub\BuildBundle\Service\Command\ShellCommand
+
+    relhub_build.httpCommand:
+        class: Relhub\BuildBundle\Service\Command\HttpCommand
+
+    relhub_build.manualCommand:
+        class: Relhub\BuildBundle\Service\Command\ManualCommand

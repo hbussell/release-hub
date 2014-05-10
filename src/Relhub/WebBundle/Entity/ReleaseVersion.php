@@ -4,6 +4,8 @@ namespace Relhub\WebBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
+use Symfony\Component\Yaml\Parser;
+
 /**
  * ReleaseVersion
  */
@@ -12,6 +14,9 @@ class ReleaseVersion
 
   const STATUS_PENDING = 'STATUS_PENDING';
   const STATUS_TESTING = 'STATUS_TESTING';
+  const STATUS_PASSED_TESTS = 'STATUS_PASSED_TESTS';
+  const STATUS_FAILED_TESTS = 'STATUS_FAILED_TESTS';
+  const STATUS_PUBLISHING = 'STATUS_PUBLISING';
   const STATUS_PUBLISHED = 'STATUS_PUBLISHED';
 
     /**
@@ -23,6 +28,18 @@ class ReleaseVersion
      * @var string
      */
     private $name;
+
+    /**
+     * @var string
+     */
+    private $stage;
+
+    /**
+     * @var string
+     */
+    private $actions;
+
+    private $actionsArray;
 
     /**
      * @var \DateTime
@@ -86,6 +103,63 @@ class ReleaseVersion
     {
         return $this->name;
     }
+
+
+    /**
+     * Set actions
+     *
+     * @param string $actions
+     * @return ReleaseVersion
+     */
+    public function setActions($actions)
+    {
+        $this->actions = $actions;
+
+        return $this;
+    }
+
+    /**
+     * Get actions
+     *
+     * @return string 
+     */
+    public function getActions()
+    {
+      return $this->actions;
+    }
+
+
+    /**
+     * Get actions array
+     *
+     * @return array
+     */
+    public function getActionsArray()
+    {
+      if (!$this->actionsArray) {          
+        $yaml = new Parser();
+        $actions = $yaml->parse($this->actions);         
+        $this->actionsArray = array();
+        foreach ($actions as $stage=>$stageActions) {
+          if (empty($stageActions)) {
+            continue;
+          }
+          foreach ($stageActions as $action) {
+            if (is_string($action)) {
+              $this->actionsArray[$stage][] = array('name'=>$action, 'options'=>array());
+            }
+            elseif (is_array($action)) {
+              foreach ($action as $name=>$options) {
+                $this->actionsArray[$stage][] = array('name'=>$name, 'options'=>$options);
+              }
+            }
+          }
+        }
+      }
+      return $this->actionsArray;
+    }
+
+
 
     /**
      * Set created
@@ -155,6 +229,31 @@ class ReleaseVersion
     {
         return $this->status;
     }
+
+    /**
+     * Set stage
+     *
+     * @param string $stage
+     * @return ReleaseVersion
+     */
+    public function setStage($stage)
+    {
+        $this->stage = $stage;
+
+        return $this;
+    }
+
+    /**
+     * Get stage
+     *
+     * @return string 
+     */
+    public function getStage()
+    {
+        return $this->stage;
+    }
+
+
 
     /**
      * Set status
@@ -262,10 +361,60 @@ class ReleaseVersion
       return $this->status == self::STATUS_PENDING;
     }
     
+    public function isPublishable() {
+      return $this->status == self::STATUS_PENDING;
+    }
 
+    public function getFriendlyStatus() {
+      if ($this->status == self::STATUS_PENDING) {
+        return 'Pending';
+      }
+      if ($this->status == self::STATUS_TESTING) {
+        return 'Testing in progress';
+      }
+      if ($this->status == self::STATUS_FAILED_TESTS) {
+        return 'Failed Testing';
+      }
+      if ($this->status == self::STATUS_PASSED_TESTS) {
+        return 'Passed Testing';
+      }
+      if ($this->status == self::STATUS_PUBLISHING) {
+        return 'Publishing in progress';
+      }
+
+      if ($this->status == self::STATUS_PUBLISHED) {
+        return 'Published';
+      }
+    }
+ 
     public function __toString() {
       return $this->name;
     }
 
+
+    public function getNextManualCommands() {
+          
+    }
+
+    public function getNextCommands() {
+      $actions = $this->getActions();
+      $currentStage = $this->getCurrentStage();
+
+    }
+
+    public function getCurrentStage() {
+      $useStage = FALSE;
+      foreach ($this->getActions() as $actionStage => $actionSteps) {
+        if (!$this->stage) {
+          // No current stage so lets use the first stage found.
+          return $actionStage;
+        }
+        else if ($this->stage == $actionStage) {
+          // check if we have any pending commands.
+          return $actionStage;
+        }
+      }
+      return FALSE;        
+    }
 
 }

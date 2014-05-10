@@ -11,16 +11,20 @@ Relhub\WebBundle\Entity\ReleaseBuild:
         status:
             type: string
             length: 255
+        stage:
+          type: string
+          length: 255
         output:
             type: text
+            nullable: TRUE
+        actions:
+            type: array
             nullable: TRUE
         created:
             type: datetimetz
         finished:
             type: datetimetz
             nullable: TRUE
-        user:
-            type: integer
     lifecycleCallbacks: {  }
 
 
@@ -30,6 +34,12 @@ Relhub\WebBundle\Entity\ReleaseBuild:
             inversedBy: releaseVersion
             joinColumn:
                 name: releaseVersion
+                referencedColumnName: id
+        user:
+            targetEntity: User
+            inversedBy: releaseBuilds
+            joinColumn:
+                name: user
                 referencedColumnName: id
 
 

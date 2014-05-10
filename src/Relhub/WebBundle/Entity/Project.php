@@ -21,6 +21,17 @@ class Project
     private $name;
 
     /**
+     * @var string
+     */
+    private $gitUrl;
+
+
+    /**
+     * @var string
+     */
+    private $actions;
+
+    /**
      * List of webhooks called before the release branch is built.
      * Eg /check-all-branches
      * @var string
@@ -85,6 +96,54 @@ class Project
     public function getName()
     {
         return $this->name;
+    }
+
+    /**
+     * Set gitUrl
+     *
+     * @param string $gitUrl
+     * @return Project
+     */
+    public function setGitUrl($gitUrl)
+    {
+        $this->gitUrl = $gitUrl;
+
+        return $this;
+    }
+
+    /**
+     * Get gitUrl
+     *
+     * @return string 
+     */
+    public function getGitUrl()
+    {
+        return $this->gitUrl;
+    }
+
+
+
+    /**
+     * Set action
+     *
+     * @param string $action
+     * @return Project
+     */
+    public function setAction($action)
+    {
+        $this->action = $action;
+
+        return $this;
+    }
+
+    /**
+     * Get action
+     *
+     * @return string 
+     */
+    public function getAction()
+    {
+        return $this->action;
     }
 
     /**

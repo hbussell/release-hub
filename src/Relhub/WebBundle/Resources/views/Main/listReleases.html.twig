@@ -3,16 +3,75 @@
 {% block title %}ReleaseHub{% endblock %}
 
 {% block body %}
-<h1>Releases</h1>
-<ul>
-{% for release in releases %}
 
-<li>
-{{release.name }}
-{% if release.isBuildable %}
-  <a href="{{ path('relhub_web_release_build', {'release': release.id}) }}">Build Release</a>
-{% endif %}
-</li>
+<div class="bs-component">
+<div class="navbar-collapse collapse navbar-inverse-collapse">
+  <ul class="nav navbar-nav">
+    <li class="active">
+      <a href="{{ path('relhub_web_release_create') }}">Create Release</a>
+    </li>
+  </ul>
+</div>
+</div>
+
+
+<h1 id="container">Releases</h1>
+{% for release_details in releases %}
+<div class="panel panel-default">
+  <div class="panel-body">
+
+<h3>{{release_details.release.name }}</h3>
+<a href="{{ path('relhub_web_release_edit', {'release': release_details.release.id}) }}">Edit Release</a>
+<form 
+  method="POST"
+  {% if release_details.hasApprovable %}
+action="{{ path('relhub_web_release_approve_stage', {'release': release_details.release.id, 'stage': release_details.currentStage}) }}"
+  {% elseif release_details.hasBuildable %}
+action="{{ path('relhub_web_release_build', {'release': release_details.release.id, 'stage': release_details.currentStage}) }}"
+  {% endif %}
+
+>
+
+{% for stage in release_details.stages %}
+<div class="list-group">
+  <a href="#" class="list-group-item active">
+    {{ stage }}
+  </a>
+  {% for action in release_details.actions[stage] %} 
+    <div class="list-group-item">
+    {% if action.command.status %}              
+      <span class="badge">Done</span>
+    {% endif %}
+    {{ action.action }}
+    {% if action.isApprovable %}
+      <input type="checkbox" name="action[]"  value="{{ action.action }} "/>
+      <label>Approve</label>
+    {% endif %}
+    
+
+
+    </div>
+  {% endfor %}
+
+</div>
+
 {% endfor %}
-</ul>
+
+<div>
+
+  {% if release_details.hasApprovable %}
+  <button type="submit" class="btn btn-primary">Approve {{ release_details.currentStage}} stage</button>
+
+  {% elseif release_details.hasBuildable %}
+  <a href="{{ path('relhub_web_release_build', {'release': release_details.release.id, 'stage': release_details.currentStage}) }}"><button type="submit" class="btn btn-primary">Run {{ release_details.currentStage}} stage</button></a>
+  {% endif %}
+
+</div>
+</form>
+  </div>
+</div>
+{% endfor %}
+
+
+
 {% endblock %}

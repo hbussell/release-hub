@@ -1,0 +1,40 @@
+Relhub\WebBundle\Entity\CommandResult:
+    type: entity
+    table: null
+    id:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+    fields:
+        action:
+            type: string
+            length: 255
+        stage:
+            type: string
+            length: 255
+        releaseId:
+            type: integer
+            column: release_id
+        output:
+            type: text
+            nullable: true
+        status:
+            type: string
+            length: 255
+        #user:
+        #    type: integer
+        created:
+            type: datetimetz
+    lifecycleCallbacks: {  }
+
+    manyToOne:
+        user:
+            targetEntity: User
+            inversedBy: commandResults
+            joinColumn:
+                name: user
+                referencedColumnName: id
+
+

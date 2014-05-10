@@ -28,6 +28,11 @@ class ReleaseBuild
     /**
      * @var string
      */
+    private $stage;
+
+    /**
+     * @var string
+     */
     private $output;
 
     /**
@@ -50,6 +55,7 @@ class ReleaseBuild
      */
     private $user;
 
+    private $actions;
 
     /**
      * Get id
@@ -83,6 +89,54 @@ class ReleaseBuild
     {
         return $this->status;
     }
+
+    /**
+     * Set actions
+     *
+     * @param string $actions
+     * @return ReleaseBuild
+     */
+    public function setActions($actions)
+    {
+        $this->actions = $actions;
+
+        return $this;
+    }
+
+    /**
+     * Get actions
+     *
+     * @return string 
+     */
+    public function getActions()
+    {
+        return $this->actions;
+    }
+
+    /**
+     * Set stage
+     *
+     * @param string $stage
+     * @return ReleaseBuild
+     */
+    public function setStage($stage)
+    {
+        $this->stage = $stage;
+
+        return $this;
+    }
+
+    /**
+     * Get stage
+     *
+     * @return string 
+     */
+    public function getStage()
+    {
+        return $this->stage;
+    }
+
+
 
     /**
      * Set output

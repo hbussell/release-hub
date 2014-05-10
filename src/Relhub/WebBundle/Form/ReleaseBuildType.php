@@ -14,6 +14,9 @@ class ReleaseBuildType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $builder->add('actions', 'collection', array(
+            'type'   => 'hidden',
+        ));
         $builder
            ->add('confirm', 'submit')
         ;
