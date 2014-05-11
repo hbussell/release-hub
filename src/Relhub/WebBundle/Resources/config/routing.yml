@@ -2,6 +2,11 @@ relhub_web_homepage:
     pattern:  /
     defaults: { _controller: RelhubWebBundle:Main:index }
 
+relhub_web_project_edit:
+    pattern:  /project/edit/{project}
+    defaults: { _controller: RelhubWebBundle:Main:editProject }
+
+
 relhub_web_project_create:
     pattern:  /project/create
     defaults: { _controller: RelhubWebBundle:Main:createProject }
@@ -29,11 +34,14 @@ relhub_web_release_approve_stage:
     pattern:  /release/approve_stage/{release}/{stage}
     defaults: { _controller: RelhubWebBundle:Main:approveReleaseStage }
 
+relhub_web_command_remove:
+    pattern:  /release/command/remove/{command}
+    defaults: { _controller: RelhubWebBundle:Main:commandRemove }
 
 
-relhub_web_release_publish:
-    pattern:  /release/publish/{release}
-    defaults: { _controller: RelhubWebBundle:Main:publishRelease }
+#relhub_web_release_publish:
+#    pattern:  /release/publish/{release}
+#    defaults: { _controller: RelhubWebBundle:Main:publishRelease }
 relhub_web_releases:
     pattern:  /release
     defaults: { _controller: RelhubWebBundle:Main:listReleases }

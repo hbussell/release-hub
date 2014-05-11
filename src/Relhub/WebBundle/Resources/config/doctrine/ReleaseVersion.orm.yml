@@ -30,6 +30,9 @@ Relhub\WebBundle\Entity\ReleaseVersion:
             type: text
         actions:
             type: text
+        options:
+            type: text
+
 
 
 

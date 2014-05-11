@@ -1,0 +1,120 @@
+{% extends '::base.html.twig' %}
+
+{% block title %}ReleaseHub{% endblock %}
+{% block body %}
+
+<script type="text/javascript">
+
+function toggleCommandDetails(id) {
+console.log('toggle command :: '+id);
+  $('#' + id).toggle();
+
+}
+</script>
+
+
+
+<div class="bs-component">
+<div class="navbar-collapse collapse navbar-inverse-collapse">
+  <ul class="nav navbar-nav">
+    <li class="active">
+      <a href="{{ path('relhub_web_release_create') }}">Create Release</a>
+    </li>
+  </ul>
+</div>
+</div>
+
+
+<h1 id="container">Releases</h1>
+{% for release_details in releases %}
+<div class="panel panel-default">
+  <div class="panel-body">
+
+<h3>{{release_details.release.name }}</h3>
+<a href="{{ path('relhub_web_release_edit', {'release': release_details.release.id}) }}">Edit Release</a>
+<form 
+  method="POST"
+  {% if release_details.hasApprovable %}
+action="{{ path('relhub_web_release_approve_stage', {'release': release_details.release.id, 'stage': release_details.currentStage}) }}"
+  {% elseif release_details.hasBuildable %}
+action="{{ path('relhub_web_release_build', {'release': release_details.release.id, 'stage': release_details.currentStage}) }}"
+  {% endif %}
+
+>
+
+{% for stage in release_details.stages %}
+<div class="list-group">
+  <a href="#" class="list-group-item active">
+    {{ stage }}
+  </a>
+  {% for action in release_details.actions[stage] %} 
+    <div class="list-group-item">
+       {{ action.action }}
+    {% if action.isApprovable %}
+      <input type="checkbox" name="action[]"  value="{{ action.action }} "/>
+      <label>Approve</label>
+    {% endif %}
+    
+    {% if action.command.status %}              
+      <!--<span class="badge">Done</span>-->
+      <div style="float:right;">
+        {% if action.command.successful %}        
+          {% if action.command.manual %}
+            <button type="button" class="btn btn-primary btn-xs" onclick="toggleCommandDetails('command-details-{{action.command.id}}');">Approved</button>
+          {% else %}
+            <button type="button" class="btn btn-primary btn-xs" onclick="toggleCommandDetails('command-details-{{action.command.id}}');">Success</button>
+          {% endif %}
+        {% else %}
+
+<button type="button" class="btn btn-danger btn-xs" onclick="toggleCommandDetails('command-details-{{action.command.id}}');">Failed</button>
+        {% endif %}
+      </div>
+
+      <div class="command-details" id="command-details-{{action.command.id}}">
+        <div class="user">
+          {% if action.command.manual %}
+          Approved
+          {% else %}
+          Run
+          {% endif %}
+
+ by <strong>{{ action.command.user }}</strong> on <strong>{{ action.command.created|date("F jS \\a\\t g:ia") }}</strong>
+        </div>        
+        {% if not action.command.manual %}
+        <div class="output">
+          {{ action.command.output|trim }}
+        </div>
+        {% endif %}
+        <div>
+          <a class="btn btn-danger btn-xs"  href="{{ path('relhub_web_command_remove', {'command': action.command.id}) }}">Delete command result</a> 
+        </div>
+
+      </div>
+    {% endif %}
+
+   
+    </div>
+  {% endfor %}
+
+</div>
+
+{% endfor %}
+
+<div>
+
+  {% if release_details.hasApprovable %}
+  <button type="submit" class="btn btn-primary">Approve {{ release_details.currentStage}} stage</button>
+
+  {% elseif release_details.hasBuildable %}
+  <a href="{{ path('relhub_web_release_build', {'release': release_details.release.id, 'stage': release_details.currentStage}) }}"><button type="submit" class="btn btn-primary">Run {{ release_details.currentStage}} stage</button></a>
+  {% endif %}
+
+</div>
+</form>
+  </div>
+</div>
+{% endfor %}
+
+
+
+{% endblock %}

@@ -3,6 +3,7 @@
 namespace Relhub\WebBundle\Service;
 
 use Relhub\WebBundle\Entity\ReleaseVersion;
+use Relhub\WebBundle\Entity\CommandResult;
 
 /**
  * TestRepository
@@ -90,7 +91,10 @@ class ReleaseVersionService
                 'status'=>$command->getStatus(),
                 'user'=>$command->getUser(),
                 'created'=>$command->getCreated(),
-                'output'=>$command->getOutput()
+                'output'=>$command->getOutput(),
+                'successful'=>$command->isSuccessful(),
+                'manual'=>$command->isManual(),
+                'id'=>$command->getId()
               );
               break;
             }
@@ -104,11 +108,13 @@ class ReleaseVersionService
       }
 
       $stages = array_keys($outActions);
+      $hasFailures = false;
+      $allSuccesful = false;
       foreach ($stages as $stage) {
         $allDone = TRUE;
         $currentStage = $stage;
         foreach ($outActions[$stage] as $action) {
-          if (!$action['command'] || !$action['command']['status']) {
+          if (!$action['command'] || !$action['command']['status'] || $action['command']['status']==CommandResult::STATUS_FAILED) {
             break 2;  // break stages foreach.
           }
         }
@@ -116,12 +122,18 @@ class ReleaseVersionService
       
       $hasApprovable = FALSE;
       $hasBuildable = FALSE;
+      $failedStages = array();
+      $successfulStages = array();
       foreach ($outActions as $stage=>$actions) {
-        
+
+        $failedCommands = 0;
+        $successfulCommands = 0;
         foreach ($actions as $key=>$action) {
           if ($stage==$currentStage) {
 
-            //var_dump('command for :: ' . $action['action']);
+           var_dump('command for :: ' . $action['action'] . ' for release '. $release->getName());
+            
+            var_dump($action['command']);
             if (!$action['command']['status']) {
               $command = $buildService->getCommandForAction($action['action']);
               if ($command->isManualAction()) {
@@ -131,8 +143,25 @@ class ReleaseVersionService
               else {
                 $hasBuildable = TRUE;
               }
+
             }
+            else {
+              if ($action['command']['status'] == CommandResult::STATUS_SUCCESSFUL) {
+                $successfulCommands ++;
+              }
+              else {
+                $failedCommands ++;
+              }
+            }
+
           } 
+        }
+
+        if ($failedCommands >0) {
+          $failedStages []= $stage;
+        }
+        elseif ($successfulCommands == count($actions)) {
+          $successfulStages []= $stage;
         }
       }
 
@@ -142,6 +171,8 @@ class ReleaseVersionService
       $outRelease['actions'] = $outActions;
       $outRelease['stages'] = array_keys($outActions);
       $outRelease['currentStage'] = $currentStage;
+      $outRelease['failedStages'] = $failedStages;
+      $outRelease['successfulStages'] = $successfulStages;
       $outReleases []= $outRelease;
     }
 
@@ -181,7 +212,7 @@ class ReleaseVersionService
       $allDone = TRUE;
       $currentStage = $stage;
       foreach ($outActions[$stage] as $action) {
-        if (!$action['command'] || !$action['command']['status']) {
+        if (!$action['command'] || !$action['command']['status'] || $action['command']['status']==CommandResult::STATUS_FAILED) {
           break 2;  // break stages foreach.
         }
       }

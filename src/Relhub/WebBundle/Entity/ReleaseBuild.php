@@ -56,6 +56,8 @@ class ReleaseBuild
     private $user;
 
     private $actions;
+    
+    private $order=0;
 
     /**
      * Get id
@@ -88,6 +90,29 @@ class ReleaseBuild
     public function getStatus()
     {
         return $this->status;
+    }
+
+    /**
+     * Set order
+     *
+     * @param string $order
+     * @return ReleaseBuild
+     */
+    public function setOrder($order)
+    {
+        $this->order = $order;
+
+        return $this;
+    }
+
+    /**
+     * Get order
+     *
+     * @return string 
+     */
+    public function getOrder()
+    {
+        return $this->order;
     }
 
     /**
@@ -241,6 +266,10 @@ class ReleaseBuild
         $this->user = $user;
 
         return $this;
+    }
+
+    public function setDone() {
+      $this->status = self::STATUS_BUILT;
     }
 
     /**

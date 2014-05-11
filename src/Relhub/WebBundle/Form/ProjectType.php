@@ -16,10 +16,8 @@ class ProjectType extends AbstractType
     {
         $builder
             ->add('name')
-            ->add('preBuildHooks')
-            ->add('postBuildHooks')
-            ->add('prePublishHooks')
-            ->add('postPublishHooks')
+            ->add('actions')
+            ->add('options')
             ->add('save', 'submit')
         ;
     }

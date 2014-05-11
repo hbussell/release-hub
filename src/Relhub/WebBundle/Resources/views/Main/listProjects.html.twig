@@ -3,14 +3,17 @@
 {% block title %}ReleaseHub{% endblock %}
 
 {% block body %}
-<h1>Project list</h1>
-<ul>
-{% for project in projects %}
 
-<li>
-{{ project.name }}
-<a href="{{ path('relhub_web_release_create', {'project': project.id}) }}">Create Release</a>
-</li>
+
+
+<h1 id="container">Projects</h1>
+{% for project in projects %}
+<div class="panel panel-default">
+  <div class="panel-body">
+    <h3>{{project.name }}</h3>
+    <a href="{{ path('relhub_web_project_edit', {'project': project.id}) }}">Edit Project</a>
+  </div>
+</div>
 {% endfor %}
-</ul>
+
 {% endblock %}

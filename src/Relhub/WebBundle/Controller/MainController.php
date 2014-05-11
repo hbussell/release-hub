@@ -54,6 +54,31 @@ class MainController extends Controller
       );
     }
 
+    public function editProjectAction(Request $request, $project)
+    {
+      $em = $this->getDoctrine()->getManager();
+      $project = $em->getRepository('RelhubWebBundle:Project')->find($project);
+
+
+      $form = $this->createForm(new ProjectType(), $project);
+      $form->handleRequest($request);
+      if ($form->isValid() ) {
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($project);
+        $em->flush();
+
+        $this->get('session')->getFlashBag()->set('success', 'Project Updated');
+        return $this->redirect($this->generateUrl('relhub_web_projects'));
+
+      }
+
+      return $this->render('RelhubWebBundle:Main:editProject.html.twig', 
+        array('form' => $form->createView(), 'project'=> $project)
+      );
+    }
+
+
+
     public function listReleasesAction()
     {
 
@@ -76,6 +101,7 @@ class MainController extends Controller
     {    
       $release = new ReleaseVersion();
       $release->setActions($project->getActions());
+      $release->setOptions($project->getOptions());
       $form = $this->createForm(new ReleaseVersionType(), $release);
       $form->handleRequest($request);
       if ($form->isValid() ) {
@@ -209,7 +235,7 @@ class MainController extends Controller
           $command->setStage($stage);
           $command->setReleaseId($release->getId());
           $command->setUser($user);
-          $command->setSuccessful();
+          $command->setApproved();
           $command->setCreated(new \DateTime());
 
           $em->persist($command);
@@ -263,5 +289,15 @@ class MainController extends Controller
 
     }
 
+    public function commandRemoveAction(Request $request, $command)
+    {    
 
+      $em = $this->getDoctrine()->getManager();
+      $command = $em->getRepository('RelhubWebBundle:CommandResult')->find($command);
+      $em->remove($command);
+      $em->flush();
+      $this->get('session')->getFlashBag()->set('success', 'Command Removed');
+      return $this->redirect($this->generateUrl('relhub_web_releases'));
+
+    }
 }

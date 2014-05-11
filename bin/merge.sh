@@ -34,12 +34,14 @@ then
   git checkout $DEST_BRANCH
   echo "merging source : $SOURCE_BRANCH"
   git merge $SOURCE_BRANCH --no-edit --ff-only
-  MERGE_STATUS=$?
+  MERGE_STATUS=$?  
   
   if [ "$DRY" = "--dry" ]
   then
     git reset --merge ORIG_HEAD
   fi
+
+  exit $MERGE_STATUS
 
     
 

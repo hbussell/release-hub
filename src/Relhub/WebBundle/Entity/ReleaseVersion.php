@@ -42,6 +42,12 @@ class ReleaseVersion
     private $actionsArray;
 
     /**
+     * @var string
+     */
+    private $options;
+    private $optionsArray;
+
+    /**
      * @var \DateTime
      */
     private $created;
@@ -356,6 +362,48 @@ class ReleaseVersion
     {
         return $this->project;
     }
+
+    /**
+     * Set options
+     *
+     * @param string $options
+     * @return Project
+     */
+    public function setOptions($options)
+    {
+        $this->options = $options;
+
+        return $this;
+    }
+
+    /**
+     * Get options
+     *
+     * @return string 
+     */
+    public function getOptions()
+    {
+        return $this->options;
+    }
+
+    /**
+     * Get options array
+     *
+     * @return string 
+     */
+    public function getOptionsArray()
+    {
+      if (!$this->optionsArray) {          
+        $base = $this->project->getOptionsArray();
+        $yaml = new Parser();
+        $optionsArray = $yaml->parse($this->options);         
+        $optionsArray['release'] = $this->getName();
+        $this->optionsArray = array_merge($base, $optionsArray);
+      } 
+      return $this->optionsArray;
+    }
+
+
 
     public function isBuildable() {
       return $this->status == self::STATUS_PENDING;

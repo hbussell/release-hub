@@ -21,6 +21,7 @@ class ReleaseVersionType extends AbstractType
             #->add('startDate')
             ->add('branchNames')
             ->add('actions')
+            ->add('options')
             ->add('approver', 'entity', array(
               'class' => 'Relhub\WebBundle\Entity\User'
               ))

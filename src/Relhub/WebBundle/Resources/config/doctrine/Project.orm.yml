@@ -13,16 +13,7 @@ Relhub\WebBundle\Entity\Project:
             length: 255
         actions:
             type: text
-        gitUrl:
-            type: string
-            length: 500
-        preBuildHooks:
-            type: text
-        postBuildHooks:
-            type: text      
-        prePublishHooks:
-            type: text
-        postPublishHooks:
+        options:
             type: text
 
     lifecycleCallbacks: {  }

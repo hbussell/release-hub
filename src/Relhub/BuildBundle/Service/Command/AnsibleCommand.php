@@ -13,7 +13,7 @@ class AnsibleCommand implements CommandInterface {
   }
 
 
-  public function execute($action) {
+  public function execute($action, $releaseVersion, $options=NULL) {
     
   }
 

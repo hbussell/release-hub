@@ -6,11 +6,16 @@ services:
         class: Relhub\BuildBundle\Service\BuildService
         arguments: [@relhub_build.ansibleCommand,@relhub_build.shellCommand,@relhub_build.httpCommand,@relhub_build.manualCommand]
 
+    relhub_build.checkout:
+        class: Relhub\BuildBundle\Service\Checkout
+        arguments: ['%kernel.root_dir%']
+
     relhub_build.ansibleCommand:
         class: Relhub\BuildBundle\Service\Command\AnsibleCommand
 
     relhub_build.shellCommand:
         class: Relhub\BuildBundle\Service\Command\ShellCommand
+        arguments: [@twig, @relhub_build.checkout]
 
     relhub_build.httpCommand:
         class: Relhub\BuildBundle\Service\Command\HttpCommand

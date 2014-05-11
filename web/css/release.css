@@ -1,0 +1,9 @@
+
+.command-details{
+  display:none;
+}
+.output {
+  font-family: monospace;
+  white-space: pre;
+  font-size:0.8em;
+}

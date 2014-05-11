@@ -11,8 +11,8 @@ class CommandResult
 {
 
     const STATUS_SUCCESSFUL = 'STATUS_SUCCESSFUL';    
+    const STATUS_APPROVED = 'STATUS_APPROVED';    
     const STATUS_FAILED = 'STATUS_FAILED';
-
 
     /**
      * @var integer
@@ -53,7 +53,7 @@ class CommandResult
      * @var \DateTime
      */
     private $created;
-   
+
 
     /**
      * Get id
@@ -172,6 +172,26 @@ class CommandResult
 
     public function setSuccessful() {
       $this->status = self::STATUS_SUCCESSFUL;
+    }
+
+    public function setFailed() {
+      $this->status = self::STATUS_FAILED;
+    }
+
+    public function isSuccessful() {
+      return $this->status == self::STATUS_SUCCESSFUL || $this->status == self::STATUS_APPROVED;
+    }
+
+    public function setApproved() {
+      $this->status = self::STATUS_APPROVED;
+    }
+
+    public function isApproved() {
+      return $this->status == self::STATUS_APPROVED;
+    }
+
+    public function isManual() {
+      return $this->isApproved();
     }
 
     /**

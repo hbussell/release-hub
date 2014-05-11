@@ -28,6 +28,8 @@ class TestCommand extends ContainerAwareCommand
 
         $em = $this->getContainer()->get('doctrine')->getEntityManager();
         $buildService = $this->getContainer()->get('relhub_build.build');
+        //      $entityManager = $this->getContainer()->get('doctrine.orm.entity_manager');
+              
         $query = $em->createQuery(
             'SELECT rb
             FROM RelhubWebBundle:ReleaseBuild rb
@@ -43,8 +45,25 @@ class TestCommand extends ContainerAwareCommand
             $releaseVersion = $build->getReleaseVersion();
             $branches = $releaseVersion->getBranches();
             $project = $releaseVersion->getProject();
-            $hooks = $project->getPreBuildHooks();
             $stage = $build->getStage();
+            $buildActionNames = $build->getActions();
+            $user = $build->getUser();
+            $stageActions = $releaseVersion->getActionsArray()[$stage];
+            $processActions = array();
+            foreach ($buildActionNames as $actionName) {
+              foreach ($stageActions as $action) {
+                if ($action['name'] == $actionName) {
+                  $processActions []= $action;
+                }
+              }
+            }
+            if (empty($processActions)) {
+              continue;
+            }
+            foreach ($processActions as $action) {
+              $this->executeAction($buildService, $action['name'], $stage, $releaseVersion, $user, $action['options']); 
+            }
+            /*
             $yaml = new Parser();
             $actionResults = array();
 
@@ -70,7 +89,7 @@ class TestCommand extends ContainerAwareCommand
               }
             }
             
-
+            */
             /*foreach (explode(PHP_EOL, $hooks) as $hook) {
               $output->writeLn('Build hook:: ' . $hook);
               foreach ($branches as $branch) {
@@ -78,11 +97,34 @@ class TestCommand extends ContainerAwareCommand
               }
 
         }*/
-
-        }
-        
+            $build->setDone();
+            $build->setFinished(new \DateTime());
+            $em->persist($build);
+            $em->flush();
+        }      
 
  
         return 0;
+    }
+
+
+    public function executeAction($buildService, $name, $stage, $releaseVersion, $user, $options) {
+        $each_branch = FALSE;
+        if (!empty($options) && in_array('each branch', $options)) {
+          $each_branch = TRUE;              
+        }
+
+        $em = $this->getContainer()->get('doctrine')->getEntityManager();
+        $command = $buildService->getCommandForAction($name);
+        $result = $command->execute($name, $stage, $releaseVersion, $user, $options);
+        
+        if ($result) {
+          $result->setCreated(new \DateTime());
+          $result->setUser($user);
+          $em->persist($result);
+
+          $em->flush();
+        }
+
     }
 }

@@ -5,6 +5,8 @@ namespace Relhub\WebBundle\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
+use Symfony\Component\Yaml\Parser;
+
 /**
  * Project
  */
@@ -23,42 +25,13 @@ class Project
     /**
      * @var string
      */
-    private $gitUrl;
-
+    private $options;
+    private $optionsArray;
 
     /**
      * @var string
      */
     private $actions;
-
-    /**
-     * List of webhooks called before the release branch is built.
-     * Eg /check-all-branches
-     * @var string
-     */ 
-    private $preBuildHooks;
-
-    /**
-     * List of webhooks called after the release branch is built.
-     * Eg /deploy-release?release=$release
-     * @var string
-     */ 
-    private $postBuildHooks;
-
-    /**
-     * List of webhooks called before the release branch published.
-     * Eg /check-test-server
-     * @var string
-     */ 
-    private $prePublishHooks;
-
-    /**
-     * List of webhooks called after the release branch is published.
-     * Eg /smoke-test-prod
-     * @var string
-     */ 
-    private $postPublishHooks;
-
 
     /**
      * @var ArrayCollection
@@ -99,145 +72,65 @@ class Project
     }
 
     /**
-     * Set gitUrl
+     * Set options
      *
-     * @param string $gitUrl
+     * @param string $options
      * @return Project
      */
-    public function setGitUrl($gitUrl)
+    public function setOptions($options)
     {
-        $this->gitUrl = $gitUrl;
+        $this->options = $options;
 
         return $this;
     }
 
     /**
-     * Get gitUrl
+     * Get options
      *
      * @return string 
      */
-    public function getGitUrl()
+    public function getOptions()
     {
-        return $this->gitUrl;
+        return $this->options;
     }
 
-
+    /**
+     * Get options array
+     *
+     * @return string 
+     */
+    public function getOptionsArray()
+    {
+      if (!$this->optionsArray) {          
+        $yaml = new Parser();
+        $this->optionsArray = $yaml->parse($this->options);         
+        $this->optionsArray['project'] = $this->name;
+      } 
+      return $this->optionsArray;
+    }
 
     /**
-     * Set action
+     * Set actions
      *
-     * @param string $action
+     * @param string $actions
      * @return Project
      */
-    public function setAction($action)
+    public function setActions($actions)
     {
-        $this->action = $action;
+        $this->actions = $actions;
 
         return $this;
     }
 
     /**
-     * Get action
+     * Get actions
      *
      * @return string 
      */
-    public function getAction()
+    public function getActions()
     {
-        return $this->action;
+        return $this->actions;
     }
-
-    /**
-     * Set pre build hooks
-     *
-     * @param string $hooks
-     * @return Project
-     */
-    public function setPreBuildHooks($hooks)
-    {
-        $this->preBuildHooks = $hooks;
-
-        return $this;
-    }
-
-    /**
-     * Get pre build hooks
-     *
-     * @return string 
-     */
-    public function getPreBuildHooks()
-    {
-        return $this->preBuildHooks;
-    }
-
-    /**
-     * Set post build hooks
-     *
-     * @param string $hooks
-     * @return Project
-     */
-    public function setPostBuildHooks($hooks)
-    {
-        $this->postBuildHooks = $hooks;
-
-        return $this;
-    }
-
-    /**
-     * Get post build hooks
-     *
-     * @return string 
-     */
-    public function getPostBuildHooks()
-    {
-        return $this->postBuildHooks;
-    }
-
-    /**
-     * Set pre publish hooks
-     *
-     * @param string $hooks
-     * @return Project
-     */
-    public function setPrePublishHooks($hooks)
-    {
-        $this->prePublishHooks = $hooks;
-
-        return $this;
-    }
-
-    /**
-     * Get pre publish hooks
-     *
-     * @return string 
-     */
-    public function getPrePublishHooks()
-    {
-        return $this->prePublishHooks;
-    }
-
-    /**
-     * Set post publish hooks
-     *
-     * @param string $hooks
-     * @return Project
-     */
-    public function setPostPublishHooks($hooks)
-    {
-        $this->postPublishHooks = $hooks;
-
-        return $this;
-    }
-
-    /**
-     * Get post publish hooks
-     *
-     * @return string 
-     */
-    public function getPostPublishHooks()
-    {
-        return $this->postPublishHooks;
-    }
-
 
     public function __toString() {
 
