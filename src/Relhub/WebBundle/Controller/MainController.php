@@ -100,6 +100,9 @@ class MainController extends Controller
     public function createReleaseAction(Request $request, $project)
     {    
       $release = new ReleaseVersion();
+      $em = $this->getDoctrine()->getManager();
+      $project = $em->getRepository('RelhubWebBundle:Project')->find($project);
+
       $release->setActions($project->getActions());
       $release->setOptions($project->getOptions());
       $form = $this->createForm(new ReleaseVersionType(), $release);

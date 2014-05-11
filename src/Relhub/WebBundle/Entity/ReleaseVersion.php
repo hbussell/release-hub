@@ -32,7 +32,7 @@ class ReleaseVersion
     /**
      * @var string
      */
-    private $stage;
+    private $stage = '';
 
     /**
      * @var string
@@ -144,6 +144,12 @@ class ReleaseVersion
     {
       if (!$this->actionsArray) {          
         $yaml = new Parser();
+
+        if (strpos($this->actions, '.yml') === strlen($this->actions) - 4 && 
+          file_exists($this->actions)) {
+          $this->actions = file_get_contents($this->actions);
+        }
+
         $actions = $yaml->parse($this->actions);         
         $this->actionsArray = array();
         foreach ($actions as $stage=>$stageActions) {
@@ -396,6 +402,12 @@ class ReleaseVersion
       if (!$this->optionsArray) {          
         $base = $this->project->getOptionsArray();
         $yaml = new Parser();
+
+        if (strpos($this->options, '.yml') === strlen($this->options) - 4 && 
+          file_exists($this->options)) {
+          $this->options = file_get_contents($this->options);
+        }
+
         $optionsArray = $yaml->parse($this->options);         
         $optionsArray['release'] = $this->getName();
         $this->optionsArray = array_merge($base, $optionsArray);

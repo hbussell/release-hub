@@ -8,6 +8,7 @@ echo "Run source: $SOURCE_BRANCH"
 
 cd $CHECKOUT
 git fetch $REMOTE
+echo "test remote:  git branch -ar | grep '$REMOTE/$SOURCE_BRANCH' "
 EXISTS_ON_REMOTE=`git branch -ar | grep "$REMOTE/$SOURCE_BRANCH"`
 echo "Exists on remote:: $EXISTS_ON_REMOTE"
 
@@ -24,6 +25,8 @@ then
     git checkout $SOURCE_BRANCH
   else
     echo "checkout out source branch from remote"
+    echo " :: git checkout -b $SOURCE_BRANCH $REMOTE/$SOURCE_BRANCH"
+
     git checkout -b $SOURCE_BRANCH $REMOTE/$SOURCE_BRANCH
   fi
 

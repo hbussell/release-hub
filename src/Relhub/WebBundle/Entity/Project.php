@@ -103,6 +103,10 @@ class Project
     {
       if (!$this->optionsArray) {          
         $yaml = new Parser();
+        if (strpos($this->options, '.yml') === strlen($this->options) - 4 && 
+          file_exists($this->options)) {
+          $this->options = file_get_contents($this->options);
+        }
         $this->optionsArray = $yaml->parse($this->options);         
         $this->optionsArray['project'] = $this->name;
       } 
