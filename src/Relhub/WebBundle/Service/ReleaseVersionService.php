@@ -131,9 +131,9 @@ class ReleaseVersionService
         foreach ($actions as $key=>$action) {
           if ($stage==$currentStage) {
 
-           var_dump('command for :: ' . $action['action'] . ' for release '. $release->getName());
+//           var_dump('command for :: ' . $action['action'] . ' for release '. $release->getName());
             
-            var_dump($action['command']);
+           // var_dump($action['command']);
             if (!$action['command']['status']) {
               $command = $buildService->getCommandForAction($action['action']);
               if ($command->isManualAction()) {
@@ -143,19 +143,23 @@ class ReleaseVersionService
               else {
                 $hasBuildable = TRUE;
               }
-
             }
-            else {
-              if ($action['command']['status'] == CommandResult::STATUS_SUCCESSFUL) {
-                $successfulCommands ++;
-              }
-              else {
-                $failedCommands ++;
-              }
-            }
+          }
 
-          } 
+
+          if ($action['command']['status']) {
+            if ($action['command']['status'] == CommandResult::STATUS_SUCCESSFUL || 
+                $action['command']['status'] == CommandResult::STATUS_APPROVED
+            ) {
+              $successfulCommands ++;
+            }
+            elseif ($action['command']['status'] == CommandResult::STATUS_FAILED) {
+              $failedCommands ++;
+            }
+          }           
         }
+
+        var_dump('successful :: ' . $successfulCommands);
 
         if ($failedCommands >0) {
           $failedStages []= $stage;

@@ -48,6 +48,8 @@ console.log('toggle command :: '+id);
 {% if stage in release_details.failedStages %}
 panel-danger
 {% elseif stage in release_details.successfulStages %}
+panel-success
+{% elseif stage == release_details.currentStage %}
 panel-primary
 {% else %}
 panel-default
