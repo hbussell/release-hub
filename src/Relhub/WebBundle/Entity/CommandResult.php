@@ -10,6 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
 class CommandResult
 {
 
+    const STATUS_PENDING = 'STATUS_PENDING';
     const STATUS_SUCCESSFUL = 'STATUS_SUCCESSFUL';    
     const STATUS_APPROVED = 'STATUS_APPROVED';    
     const STATUS_FAILED = 'STATUS_FAILED';
@@ -42,7 +43,7 @@ class CommandResult
     /**
      * @var string
      */
-    private $status;
+    private $status = self::STATUS_PENDING;
 
     /**
      * @var integer
@@ -189,6 +190,12 @@ class CommandResult
     public function isApproved() {
       return $this->status == self::STATUS_APPROVED;
     }
+
+    public function isPending() {
+      return $this->status == self::STATUS_PENDING;
+    }
+
+
 
     public function isManual() {
       return $this->isApproved();

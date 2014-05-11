@@ -55,18 +55,29 @@ class ReleaseVersionService
 
   }
 
-  public function getReleasesForDisplay() {
+  public function getReleasesForDisplay($project=NULL) {
 
     $buildService = $this->buildService;
 
     $em = $this->entityManager;
-    $query = $em->createQuery(
-        'SELECT r
-        FROM RelhubWebBundle:ReleaseVersion r
-        where r.status != :published
-        ORDER BY r.project ASC, r.dueDate'
-      )->setParameter('published', ReleaseVersion::STATUS_PUBLISHED);
+    if ($project) {
+      $query = $em->createQuery(
+          'SELECT r
+          FROM RelhubWebBundle:ReleaseVersion r
+          where r.status != :published
+          and r.project = :project
+          ORDER BY r.project ASC, r.dueDate'
+        )->setParameter('published', ReleaseVersion::STATUS_PUBLISHED)->setParameter('project', $project);
 
+    } 
+    else {
+      $query = $em->createQuery(
+          'SELECT r
+          FROM RelhubWebBundle:ReleaseVersion r
+          where r.status != :published
+          ORDER BY r.project ASC, r.dueDate'
+        )->setParameter('published', ReleaseVersion::STATUS_PUBLISHED);
+    }
     $releases = $query->getResult();
 
     $outReleases = array();
@@ -93,6 +104,7 @@ class ReleaseVersionService
                 'created'=>$command->getCreated(),
                 'output'=>$command->getOutput(),
                 'successful'=>$command->isSuccessful(),
+                'pending'=>$command->isPending(),
                 'manual'=>$command->isManual(),
                 'id'=>$command->getId()
               );
@@ -114,7 +126,10 @@ class ReleaseVersionService
         $allDone = TRUE;
         $currentStage = $stage;
         foreach ($outActions[$stage] as $action) {
-          if (!$action['command'] || !$action['command']['status'] || $action['command']['status']==CommandResult::STATUS_FAILED) {
+          if (!$action['command'] || 
+            !$action['command']['status'] ||
+            $action['command']['status']==CommandResult::STATUS_FAILED ||
+            $action['command']['status']==CommandResult::STATUS_PENDING) {
             break 2;  // break stages foreach.
           }
         }
@@ -159,7 +174,6 @@ class ReleaseVersionService
           }           
         }
 
-        var_dump('successful :: ' . $successfulCommands);
 
         if ($failedCommands >0) {
           $failedStages []= $stage;
@@ -216,7 +230,10 @@ class ReleaseVersionService
       $allDone = TRUE;
       $currentStage = $stage;
       foreach ($outActions[$stage] as $action) {
-        if (!$action['command'] || !$action['command']['status'] || $action['command']['status']==CommandResult::STATUS_FAILED) {
+        if (!$action['command'] || 
+          !$action['command']['status'] || 
+          $action['command']['status']==CommandResult::STATUS_FAILED ||
+          $action['command']['status']==CommandResult::STATUS_PENDING) {
           break 2;  // break stages foreach.
         }
       }

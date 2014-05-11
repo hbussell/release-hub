@@ -42,6 +42,10 @@ relhub_web_command_remove:
 #relhub_web_release_publish:
 #    pattern:  /release/publish/{release}
 #    defaults: { _controller: RelhubWebBundle:Main:publishRelease }
+relhub_web_releases_project:
+    pattern:  /release/{project}
+    defaults: { _controller: RelhubWebBundle:Main:listProjectReleases }
+
 relhub_web_releases:
     pattern:  /release
     defaults: { _controller: RelhubWebBundle:Main:listReleases }

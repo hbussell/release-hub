@@ -28,8 +28,9 @@ class MainController extends Controller
     public function listProjectsAction()
     {
         $projects = $this->getDoctrine()->getManager()->getRepository('RelhubWebBundle:Project')->findAll();
+        $data = array('projects' => $projects);
         return $this->render('RelhubWebBundle:Main:listProjects.html.twig', 
-          array('projects' => $projects)
+          array_merge($data, $this->getCommonData())
         );
     }
 
@@ -49,8 +50,9 @@ class MainController extends Controller
 
       }
 
+      $data = array('form' => $form->createView());
       return $this->render('RelhubWebBundle:Main:createProject.html.twig', 
-        array('form' => $form->createView())
+        array_merge($data, $this->getCommonData())
       );
     }
 
@@ -72,8 +74,9 @@ class MainController extends Controller
 
       }
 
+      $data = array('form' => $form->createView(), 'project'=> $project);
       return $this->render('RelhubWebBundle:Main:editProject.html.twig', 
-        array('form' => $form->createView(), 'project'=> $project)
+        array_merge($data, $this->getCommonData())
       );
     }
 
@@ -92,7 +95,23 @@ class MainController extends Controller
           'releases' => $releases,
         );
       return $this->render('RelhubWebBundle:Main:listReleases.html.twig', 
-        $data
+        array_merge($data, $this->getCommonData())
+      );
+
+    }
+
+    public function listProjectReleasesAction($project)
+    {
+
+      $em = $this->getDoctrine()->getManager();
+      $project = $em->getRepository('RelhubWebBundle:Project')->findByName($project);
+      $rep = $this->get('relhub_web.release_version');
+      $releases = $rep->getReleasesForDisplay($project);
+      $data = array(
+          'releases' => $releases,
+        );
+      return $this->render('RelhubWebBundle:Main:listReleases.html.twig', 
+        array_merge($data, $this->getCommonData())
       );
 
     }
@@ -117,9 +136,9 @@ class MainController extends Controller
         $this->get('session')->getFlashBag()->set('success', 'Release Created');
         return $this->redirect($this->generateUrl('relhub_web_projects'));
       }
-
+      $data = array('form' => $form->createView());
       return $this->render('RelhubWebBundle:Main:createRelease.html.twig', 
-        array('form' => $form->createView())
+        array_merge($data, $this->getCommonData())
       );
     }
 
@@ -143,11 +162,13 @@ class MainController extends Controller
         return $this->redirect($this->generateUrl('relhub_web_releases'));
       }
 
-      return $this->render('RelhubWebBundle:Main:editRelease.html.twig', 
-        array(
+      $data = array(
           'form' => $form->createView(),
           'release' => $release
-        )
+        );
+
+      return $this->render('RelhubWebBundle:Main:editRelease.html.twig', 
+        array_merge($data, $this->getCommonData())
       );
     }
 
@@ -166,10 +187,8 @@ class MainController extends Controller
       }
 
       $actions = $releaseVersion->getBuildableActionsForStage($release, $stage);
-
-      var_dump($actions);
-      //
-//     var_dump($release->getActions());
+      
+     
 
       $build = new ReleaseBuild();
       $build->setActions($actions);
@@ -183,6 +202,16 @@ class MainController extends Controller
         $build->setReleaseVersion($release);
         $build->setUser($user);
         $em->persist($build);
+
+        foreach ($actions as $action) { 
+          $commandResult = new CommandResult();
+          $commandResult->setAction($action);
+          $commandResult->setStage($stage);
+          $commandResult->setReleaseId($release->getId());
+          $commandResult->setUser($user);
+          $commandResult->setCreated(new \DateTime());
+          $em->persist($commandResult);
+        }
         $em->flush();
         $this->get('session')->getFlashBag()->set('success', 'Release Build Created');
         return $this->redirect($this->generateUrl('relhub_web_releases'));
@@ -301,6 +330,18 @@ class MainController extends Controller
       $em->flush();
       $this->get('session')->getFlashBag()->set('success', 'Command Removed');
       return $this->redirect($this->generateUrl('relhub_web_releases'));
+
+    }
+
+    public function getCommonData() {
+      $em = $this->getDoctrine()->getManager();
+      $projects = $em->getRepository('RelhubWebBundle:Project')->findAll();
+      $releases = $em->getRepository('RelhubWebBundle:ReleaseVersion')->findAll();
+      $data = array(
+        'all_projects'=>$projects,
+        'all_releases'=>$releases
+      );
+      return $data;
 
     }
 }
