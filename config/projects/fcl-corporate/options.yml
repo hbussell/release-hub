@@ -1,3 +1,0 @@
-gitUrl: git@github.com:fclimited/fcl-corporate.git
-remote: origin
-releaseBranch: "{{ release }}"
