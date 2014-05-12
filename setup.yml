@@ -1,6 +1,6 @@
 ---
 - hosts: localhost
-
+  sudo: true
   vars:
     git_url: git@github.com:hbussell/release-hub.git
   
