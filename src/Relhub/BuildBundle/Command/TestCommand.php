@@ -10,6 +10,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Yaml\Parser;
 
 use Relhub\WebBundle\Entity\ReleaseBuild;
+use Relhub\WebBundle\Entity\CommandResult;
 
 
 class TestCommand extends ContainerAwareCommand
@@ -116,14 +117,41 @@ class TestCommand extends ContainerAwareCommand
 
         $em = $this->getContainer()->get('doctrine')->getEntityManager();
         $command = $buildService->getCommandForAction($name);
+
+  /*      $pendingResult = $em->getRepository('RelhubWebBundle:CommandResult')->find(array(
+          'action'=>$name, 
+          'stage'=>$stage,
+          'releaseId'=>$releaseVersion->getId()
+        ));
+
+   */
+//        var_dumP($name);
+  //      var_dump($stage);
+    //    var_dump($releaseVersion->getId());
+        $pendingResult = $em->createQuery('SELECT c FROM RelhubWebBundle:CommandResult c WHERE c.action = :action and c.stage = :stage and c.releaseId = :releaseId and c.status = :status')
+           ->setParameter('action', $name)
+           ->setParameter('stage', $stage)
+           ->setParameter('releaseId', $releaseVersion->getId())
+           ->setParameter('status', CommandResult::STATUS_PENDING)
+           ->getSingleResult();
+//           ->getSingleResult();
+
         $result = $command->execute($name, $stage, $releaseVersion, $user, $options);
-        
+     
         if ($result) {
           $result->setCreated(new \DateTime());
           $result->setUser($user);
-          $em->persist($result);
 
-          $em->flush();
+          if ($pendingResult) {
+            $pendingResult->setOutput($result->getOutput());
+            $pendingResult->setStatus($result->getStatus());
+            $em->persist($pendingResult);
+            $em->flush();
+          }
+          else {
+            $em->persist($result);
+            $em->flush();
+          }
         }
 
     }

@@ -74,12 +74,13 @@ panel-default
                   <button type="button" class="btn btn-primary btn-xs" onclick="toggleCommandDetails('command-details-{{action.command.id}}');">Success</button>
                 {% endif %}
               {% elseif action.command.pending %}        
-                  <button type="button" class="btn btn-info btn-xs" onclick="toggleCommandDetails('command-details-{{action.command.id}}');">Pending</button>
+                  <button type="button" class="btn btn-info btn-xs">Pending</button>
               {% else %}
                 <button type="button" class="btn btn-danger btn-xs" onclick="toggleCommandDetails('command-details-{{action.command.id}}');">Failed</button>
               {% endif %}
             </div>
 
+            {% if not action.command.pending %}        
             <div class="command-details" id="command-details-{{action.command.id}}">
               <div class="user">
                 {% if action.command.manual %}
@@ -97,8 +98,8 @@ panel-default
               <div>
                 <a class="btn btn-danger btn-xs"  href="{{ path('relhub_web_command_remove', {'command': action.command.id}) }}">Delete command result</a> 
               </div>
-
-            </div>
+            </div>            
+            {% endif %}
           {% endif %}
          
         </div>

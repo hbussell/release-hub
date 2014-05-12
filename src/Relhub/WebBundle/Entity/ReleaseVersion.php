@@ -151,6 +151,9 @@ class ReleaseVersion
         }
 
         $actions = $yaml->parse($this->actions);         
+        if (!$actions) {
+          return;
+        }
         $this->actionsArray = array();
         foreach ($actions as $stage=>$stageActions) {
           if (empty($stageActions)) {

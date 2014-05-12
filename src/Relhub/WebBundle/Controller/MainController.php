@@ -217,12 +217,14 @@ class MainController extends Controller
         return $this->redirect($this->generateUrl('relhub_web_releases'));
       }
 
-      return $this->render('RelhubWebBundle:Main:buildRelease.html.twig', 
-        array(
+      $data = array(
           'form' => $form->createView(),
           'release' => $release,
           'actions' => $actions
-        )
+        );
+
+      return $this->render('RelhubWebBundle:Main:buildRelease.html.twig', 
+        array_merge($data, $this->getCommonData())
       );
 
     }
@@ -278,13 +280,15 @@ class MainController extends Controller
         return $this->redirect($this->generateUrl('relhub_web_releases'));
       }
 
-      return $this->render('RelhubWebBundle:Main:approveReleaseStage.html.twig', 
-        array(
+      $data = array(
           'stage' => $stage,
           'form' => $form->createView(),
           'release' => $release,
           'actions' => $approveActions
-        )
+        );
+
+      return $this->render('RelhubWebBundle:Main:approveReleaseStage.html.twig', 
+        array_merge($data, $this->getCommonData())
       );
 
     }
@@ -312,11 +316,13 @@ class MainController extends Controller
         return $this->redirect($this->generateUrl('relhub_web_releases'));
       }
 
-      return $this->render('RelhubWebBundle:Main:publishRelease.html.twig', 
-        array(
+      $data = array(
           'form' => $form->createView(),
           'release' => $release
-        )
+        );
+
+      return $this->render('RelhubWebBundle:Main:publishRelease.html.twig', 
+        array_merge($data, $this->getCommonData())
       );
 
     }

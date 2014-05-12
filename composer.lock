@@ -3,8 +3,46 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "f8fa42502ebc12ec4b95a42e72dd8a41",
+    "hash": "1066f025c6c408f749def020cf8a58dd",
     "packages": [
+        {
+            "name": "carrlabs/git-wrapper",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/CarrLabs/git-wrapper.git",
+                "reference": "010d75571d84636ad4be0b88e26135f014e78180"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/CarrLabs/git-wrapper/zipball/010d75571d84636ad4be0b88e26135f014e78180",
+                "reference": "010d75571d84636ad4be0b88e26135f014e78180",
+                "shasum": ""
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "CarrLabs\\GitWrapper\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-2-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Brent Goldthwaite",
+                    "email": "brent@carr-labs.com"
+                }
+            ],
+            "description": "A wrapper for the git command line executable, based on YiiGit (https://github.com/phpnode/YiiGit).  Allows access to all git commands via a simple object oriented interface.",
+            "homepage": "https://github.com/CarrLabs/git-wrapper",
+            "keywords": [
+                "git",
+                "vcs"
+            ],
+            "time": "2013-10-03 04:16:07"
+        },
         {
             "name": "doctrine/annotations",
             "version": "v1.1.2",
@@ -1635,9 +1673,9 @@
 
     ],
     "minimum-stability": "stable",
-    "stability-flags": [
-
-    ],
+    "stability-flags": {
+        "carrlabs/git-wrapper": 20
+    },
     "platform": {
         "php": ">=5.3.3"
     },

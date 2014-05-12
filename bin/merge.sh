@@ -5,17 +5,21 @@ DEST_BRANCH=$3
 REMOTE=$4
 DRY=$5
 echo "Run source: $SOURCE_BRANCH"
+echo "using checkout :: $CHECKOUT"
+echo "using destination branch: $DEST_BRANCH"
+echo "using Remote: $REMOTE"
+echo "Dry run : $DRY"
 
 cd $CHECKOUT
 git fetch $REMOTE
-echo "test remote:  git branch -ar | grep '$REMOTE/$SOURCE_BRANCH' "
-EXISTS_ON_REMOTE=`git branch -ar | grep "$REMOTE/$SOURCE_BRANCH"`
-echo "Exists on remote:: $EXISTS_ON_REMOTE"
+echo "check if branch exists using:  git branch -ar | grep $SOURCE_BRANCH "
+BRANCH_EXISTS=$(git branch -ar | grep "$SOURCE_BRANCH")
+echo "Branch seach result:: $BRANCH_EXISTS"
 
-if [ -z != $EXISTS_ON_REMOTE ] 
+if [ -z != $BRANCH_EXISTS ] 
 then
   
-  EXISTS_ON_LOCAL=`git branch --list $SOURCE_BRANCH`
+  EXISTS_ON_LOCAL=$(git branch --list $SOURCE_BRANCH)
   echo "Exists on Local:: $EXISTS_ON_LOCAL"
 
   if [ -z != $EXISTS_ON_LOCAL ] 
@@ -43,13 +47,11 @@ then
   then
     git reset --merge ORIG_HEAD
   fi
-
   exit $MERGE_STATUS
-
-    
+   
 
 else
-  echo "Branch does not exist on remote: $SOURCE_BRANCH"
+  echo "Branch does not exist $SOURCE_BRANCH"
   exit 1
 fi
 
