@@ -1,4 +1,4 @@
-Release Hub
+Release Hub [![Build status...](https://api.travis-ci.org/hbussell/release-hub.png?branch=master)](https://travis-ci.org/hbussell/release-hub)
 ===========
 
 Automate **your** release process.
