@@ -1,0 +1,4 @@
+conf_runner_ui:
+    resource: "@ConfRunnerUiBundle/Resources/config/routing.yml"
+    prefix:   /
+
