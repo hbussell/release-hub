@@ -1,0 +1,7 @@
+parameters:
+#    step_step.example.class: Step\StepBundle\Example
+
+services:
+#    step_step.example:
+#        class: %step_step.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]

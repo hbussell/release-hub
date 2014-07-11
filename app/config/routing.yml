@@ -1,3 +1,7 @@
+step_step:
+    resource: "@StepStepBundle/Resources/config/routing.yml"
+    prefix:   /
+
 fos_user_security:
     resource: "@FOSUserBundle/Resources/config/routing/security.xml"
 
@@ -21,4 +25,6 @@ relhub_web:
     resource: "@RelhubWebBundle/Resources/config/routing.yml"
     prefix:   /
 
-
+BCCResqueBundle:
+    resource: "@BCCResqueBundle/Resources/config/routing.xml"
+    prefix:   /resque

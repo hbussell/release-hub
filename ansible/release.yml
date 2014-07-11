@@ -1,0 +1,12 @@
+---
+- hosts: localhost
+
+  
+  tasks:
+    - name: merge branches
+      action: 
+
+    - name: set cache permissions
+      action: file path=app/cache mode=0660 owner=www-data group=www-data
+
+

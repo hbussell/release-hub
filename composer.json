@@ -20,7 +20,8 @@
         "sensio/generator-bundle": "~2.3",
         "incenteev/composer-parameter-handler": "~2.0",
         "friendsofsymfony/user-bundle": "v1.3.3",
-        "carrlabs/git-wrapper": "dev-master"
+        "carrlabs/git-wrapper": "dev-master",
+        "bcc/resque-bundle": "1.1.7"
 
     },
     "scripts": {
