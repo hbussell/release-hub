@@ -28,3 +28,8 @@ relhub_web:
 BCCResqueBundle:
     resource: "@BCCResqueBundle/Resources/config/routing.xml"
     prefix:   /resque
+
+conf_runner_ui:
+    resource: "@ConfRunnerUiBundle/Resources/config/routing.yml"
+    prefix:   /
+

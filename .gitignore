@@ -15,3 +15,14 @@ app/config/parameters.yml
 app/projects
 app/cache/.gitkeep
 app/logs/.gitkeep
+/web/bundles/
+/app/bootstrap.php.cache
+/app/cache/*
+/app/config/parameters.yml
+/app/logs/*
+!app/cache/.gitkeep
+!app/logs/.gitkeep
+/build/
+/vendor/
+/bin/
+/composer.phar

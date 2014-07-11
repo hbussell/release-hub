@@ -22,7 +22,9 @@
         "friendsofsymfony/user-bundle": "v1.3.3",
         "carrlabs/git-wrapper": "dev-master",
         "bcc/resque-bundle": "1.1.7"
-
+    },
+    "require-dev": {
+        "phpspec/phpspec": "dev-master"
     },
     "scripts": {
         "post-install-cmd": [

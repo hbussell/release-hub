@@ -1,0 +1,20 @@
+name: Production Release
+description: do stuff
+
+stage1:
+  step 1: manual setup step
+  step 2:
+    run: ls
+    desc: list files
+  step 3:
+    run: cd {{path}};do stuff
+    desc: move into directory and run
+  step 4: confirm everything is working
+
+stage2:
+  step 1: 
+    run: ls
+  step 2:
+    manual: confirmation
+    desc: get manual confirmation
+

@@ -1,0 +1,19 @@
+conf_runner_ui_homepage:
+    pattern:  /hello/{name}
+    defaults: { _controller: ConfRunnerUiBundle:Default:index }
+
+list:
+    pattern: /
+    defaults: { _controller: ConfRunnerUiBundle:Process:list }
+
+create:
+    pattern: /create
+    defaults: { _controller: ConfRunnerUiBundle:Process:create }
+
+edit:
+    pattern: /edit
+    defaults: { _controller: ConfRunnerUiBundle:Process:edit }
+
+delete:
+    pattern: /delete
+    defaults: { _controller: ConfRunnerUiBundle:Process:delete }
