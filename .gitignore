@@ -13,3 +13,5 @@ app/config/parameters.ini
 app/config/parameters.yml
 
 app/projects
+app/cache/.gitkeep
+app/logs/.gitkeep
